@@ -1,21 +1,28 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import useUsersSearch from './hooks/useUsersSearch';
 
 const Search = () => {
   const [query, setQuery] = useState('');
   const [delayedQuery, setDelayedQuery] = useState(query);
-  const [users, isLoading, isError] = useUsersSearch(delayedQuery);
+  const [users, isLoading] = useUsersSearch(delayedQuery);
+  const typingBackupTimeoutToGetLastCall = useRef(null);
+  const timeOfLastAPICall = useRef(null);
 
-  const searchTimeout = useRef(null);
+  const handleQueryChange = (newQuery) => {
+    setQuery(newQuery);
 
-  const handleQueryChange = (query) => {
-    setQuery(query);
+    let currentTime = Date.now();
+
+    if (typingBackupTimeoutToGetLastCall.current) clearTimeout(typingBackupTimeoutToGetLastCall.current);
     
-    if (searchTimeout.current) clearTimeout(searchTimeout.current);
-
-    searchTimeout.current = setTimeout(() => {
-      setDelayedQuery(query);
-    }, 300);
+    if (!timeOfLastAPICall.current || currentTime - timeOfLastAPICall.current >= 300) {
+      setDelayedQuery(newQuery);
+      timeOfLastAPICall.current = currentTime;
+    } else {
+      typingBackupTimeoutToGetLastCall.current = setTimeout(() => {
+        setDelayedQuery(newQuery);
+      }, 300);
+    }
   }
 
   return (

@@ -20,4 +20,4 @@ const useUsersSearch = (query) => {
   return [data, isLoading];
 }
 
-export default useUsersSearch
+export default useUsersSearch;

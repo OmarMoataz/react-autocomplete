@@ -1,0 +1,8 @@
+{
+  "users": [
+    { "id": 1, "name": "Omar Moataz", "author": "typicode" },
+    { "id": 2, "name": "Fathy Mansour" },
+    { "id": 3, "name": "David" },
+    { "id": 4, "name": "Omam Moataz", "author": "typicode" }
+  ]
+}
